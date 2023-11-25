@@ -10,6 +10,9 @@ const postSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    linkUrl: {
+        type: String
+    },
     likes: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
