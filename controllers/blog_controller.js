@@ -25,7 +25,7 @@ const getOneBlog = async (req, res) => {
         const blogId = req.params.blogId;
         const relatedBlog = await Blog.findOne({ _id: blogId });
         if (!relatedBlog) {
-            return res.status(400).json({success:false,msg:'Blog not found'}) 
+            return res.status(404).json({success:false,msg:'Blog not found'}) 
         }
         return res.status(200).json({success:true,msg:'related blog',blog:relatedBlog})
     } catch (error) {
