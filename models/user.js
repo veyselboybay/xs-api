@@ -20,6 +20,10 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    avatarNumber: {
+        type: String,
+        default: 'One'
+    },
     profilePicURL: {
         type: String,
         default: null

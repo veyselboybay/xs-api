@@ -47,7 +47,8 @@ const loginController = async (req, res) => {
                 id: isUser._id,
                 username: isUser.username,
                 token: token,
-                msg:'User Logged In Successfully'
+                msg: 'User Logged In Successfully',
+                avatarNumber: isUser.avatarNumber
             });
         } else {
             return res.status(401).json({success:false,msg:'Invalid email or password'})
@@ -89,7 +90,7 @@ const getUserController = async (req, res) => {
         const id = req.params.id;
         const user = await UserModel.findOne({ _id: id }).select('-password');
         if (user) {
-            return res.status(200).json({success:true,msg:'Success',user:{id:user._id,username:user.username,school:user.school}})
+            return res.status(200).json({success:true,msg:'Success',user:{id:user._id,username:user.username,school:user.school, avatarNumber: user.avatarNumber}})
         } else {
             return res.status(401).json({success: false, msg:'user does not exists'})
         }
