@@ -42,6 +42,45 @@ const createBlog = async (req, res) => {
     }
 }
 
+const likeBlog = async (req, res) => {
+    const blogId = req.params.blogId;
+    try {
+        const relatedBlog = await Blog.findById({ _id: blogId });
+        if (!relatedBlog) {
+            return res.status(400).json({ success: false, msg: 'No Blog Found!' });
+        }
+        if (relatedBlog.likes.includes(req.user._id)) {
+            return res.status(400).json({ success: false, msg: 'Already liked!' });
+        }
+        await relatedBlog.likes.push(req.user._id);
+        await relatedBlog.save();
+        return res.status(200).json({ success: true, msg: 'success' });
+    } catch (error) {
+        return res.status(500).json({success:false,msg:error.message})
+    }
+}
+
+const unlikeBlog = async (req, res) => {
+    const blogId = req.params.blogId;
+    try {
+        const relatedBlog = await Blog.findById({ _id: blogId });
+        if (!relatedBlog) {
+            return res.status(400).json({ success: false, msg: 'No Blog Found!' });
+        }
+        if (relatedBlog.likes.includes(req.user._id)) {
+            await Blog.updateOne({ _id: blogId }, {
+                $pull: { likes: { $in: [req.user._id] } }
+            }, { new: true });
+            relatedBlog.save();
+            return res.status(200).json({success:true,msg:'success unliked'})
+        } else {
+            return res.status(400).json({ success: false, msg: 'Something went wrong' });
+        }
+    } catch (error) {
+        return res.status(500).json({success:false,msg:error.message})
+    }
+}
+
 const updateBlog = async (req, res) => {
     try {
         const blogId = req.params.blogId;
@@ -79,4 +118,4 @@ const deleteBlog = async (req, res) => {
 
 
 
-module.exports = {getAllBlogs, createBlog, updateBlog, deleteBlog,getOneBlog,getMyBlogs}
+module.exports = {getAllBlogs, createBlog, updateBlog, deleteBlog,getOneBlog,getMyBlogs, likeBlog, unlikeBlog}
